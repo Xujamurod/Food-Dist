@@ -445,7 +445,10 @@ window.addEventListener('DOMContentLoaded', function () {
     //     .then(response => response.json())
     //     .then(json => console.log(json))
 
-    
+
+    fetch('db.json')
+        .then(data => data.json())
+        .then(res => console.log(res))
 });
 
 

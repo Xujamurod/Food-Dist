@@ -446,7 +446,12 @@ window.addEventListener('DOMContentLoaded', function () {
     //     .then(json => console.log(json))
 
 
-    fetch('db.json')
+    // fetch('db.json')
+    //     .then(data => data.json())
+    //     .then(res => console.log(res))
+
+
+    fetch('http://localhost:3000/menu')
         .then(data => data.json())
         .then(res => console.log(res))
 });

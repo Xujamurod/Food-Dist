@@ -331,10 +331,22 @@ window.addEventListener('DOMContentLoaded', function () {
     };
 
     forms.forEach(item => {
-        postData(item);
+        bindPostData(item);
     });
 
-    function postData(form) {
+    const postData = async (url, data) => {
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: data
+        });
+    
+        return await res.json();
+    };
+
+    function bindPostData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -346,50 +358,47 @@ window.addEventListener('DOMContentLoaded', function () {
             `;
             form.insertAdjacentElement('afterend', statusMessage);
 
-
-
             // const request = new XMLHttpRequest();
             // request.open('POST', 'server.php');
             // request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-
-
-            // const formData = new FormData(form);
-
+            
+            
+            const formData = new FormData(form);
+            
             const object = {};
             formData.forEach(function (value, key) {
                 object[key] = value;
             });
 
-            // const json = JSON.stringify(object);
+            postData('http://localhost:3000/requests', JSON.stringify(object))
+            .then(data => {
+                console.log(data);
+                showThanksModal(message.success);
+                statusMessage.remove(); 
+            })
+            .catch(() => {
+                showThanksModal(message.failure);
+            })
+            .finally(() => {
+                form.reset();
+            })
+
 
 
 
             // request.send(json);
 
 
-
-
-            fetch('server.php', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json',
-                },
-                // body: formData,
-                body: JSON.stringify(object),
-            })
-                .then(data => data.text())
-                .then(data => {
-                    console.log(data);
-                    showThanksModal(message.success);
-                    statusMessage.remove();
-                })
-                .catch(() => {
-                    showThanksModal(message.failure);
-                })
-                .finally(() => {
-                    form.reset();
-                })
-
+            // fetch('server.php', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-type': 'application/json',
+            //     },
+            //     // body: formData,
+            //     body: JSON.stringify(object),
+            // })
+            // .then(data => data.text())
+            // postData('server.php', JSON.stringify(object))
 
 
             // request.addEventListener('load', () => {
@@ -415,7 +424,7 @@ window.addEventListener('DOMContentLoaded', function () {
         thanksModal.classList.add('modal__dialog');
         thanksModal.innerHTML = `
             <div class="modal__content">
-                <div class="modal__close" data-close>&times;</div>
+                <div class="modal__close" data-close>×</div>
                 <div class="modal__title">${message}</div>
             </div>
         `;
@@ -432,9 +441,9 @@ window.addEventListener('DOMContentLoaded', function () {
     // fetch('https://jsonplaceholder.typicode.com/todos/1',)
     //     .then(response => response.json())
     //     .then(json => console.log(json))
-
-
-
+    
+    
+    
     // fetch('https://jsonplaceholder.typicode.com/posts', {
     //     method: 'POST',
     //     body: JSON.stringify({ name: 'Hunter' }),
@@ -444,16 +453,19 @@ window.addEventListener('DOMContentLoaded', function () {
     // })
     //     .then(response => response.json())
     //     .then(json => console.log(json))
-
-
+    
+    
     // fetch('db.json')
     //     .then(data => data.json())
     //     .then(res => console.log(res))
-
-
-    fetch('http://localhost:3000/menu')
-        .then(data => data.json())
-        .then(res => console.log(res))
+    
+    
+    // fetch('http://localhost:3000/menu')
+    //     .then(data => data.json())
+    //     .then(res => console.log(res))
 });
 
 
+    
+    
+    
